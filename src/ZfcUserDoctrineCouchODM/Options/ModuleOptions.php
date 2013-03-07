@@ -1,6 +1,6 @@
 <?php
 
-namespace ZfcUserDoctrineMongoODM\Options;
+namespace ZfcUserDoctrineCouchODM\Options;
 
 use ZfcUser\Options\ModuleOptions as BaseModuleOptions;
 
@@ -9,7 +9,7 @@ class ModuleOptions extends BaseModuleOptions
     /**
      * @var string
      */
-    protected $userEntityClass = 'ZfcUserDoctrineMongoODM\Document\User';
+    protected $userEntityClass = 'ZfcUserDoctrineCouchODM\Document\User';
 
     /**
      * @var bool

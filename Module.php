@@ -1,8 +1,8 @@
 <?php
 
-namespace ZfcUserDoctrineMongoODM;
+namespace ZfcUserDoctrineCouchODM;
 
-use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
+use Doctrine\ODM\CouchDB\Mapping\Driver\XmlDriver;
 use ZfcUser\Module as ZfcUser;
 
 class Module
@@ -16,7 +16,7 @@ class Module
         // Add the default entity driver only if specified in configuration
         if ($options->getEnableDefaultEntities()) {
             $chain = $sm->get('doctrine.driver.odm_default');
-            $chain->addDriver(new XmlDriver(__DIR__ . '/config/xml'), 'ZfcUserDoctrineMongoODM\Document');
+            $chain->addDriver(new XmlDriver(__DIR__ . '/config/xml'), 'ZfcUserDoctrineCouchODM\Document');
         }
     }
 
@@ -47,7 +47,7 @@ class Module
                     return new Options\ModuleOptions(isset($config['zfcuser']) ? $config['zfcuser'] : array());
                 },
                 'zfcuser_user_mapper' => function ($sm) {
-                    return new \ZfcUserDoctrineMongoODM\Mapper\UserMongoDB(
+                    return new \ZfcUserDoctrineCouchODM\Mapper\UserCouchDB(
                         $sm->get('zfcuser_doctrine_dm'),
                         $sm->get('zfcuser_module_options')
                     );

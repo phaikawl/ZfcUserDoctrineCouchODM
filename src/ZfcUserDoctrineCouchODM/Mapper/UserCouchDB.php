@@ -1,11 +1,11 @@
 <?php
 
-namespace ZfcUserDoctrineMongoODM\Mapper;
+namespace ZfcUserDoctrineCouchODM\Mapper;
 
-use Doctrine\ODM\MongoDB\DocumentManager,
-    ZfcUserDoctrineMongoODM\Options\ModuleOptions;
+use Doctrine\ODM\CouchDB\DocumentManager,
+    ZfcUserDoctrineCouchODM\Options\ModuleOptions;
 
-class UserMongoDB implements \ZfcUser\Mapper\UserInterface
+class UserCouchDB implements \ZfcUser\Mapper\UserInterface
 {
     /**
      * @var \Doctrine\ODM\DocumentManager
