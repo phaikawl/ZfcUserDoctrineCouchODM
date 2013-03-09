@@ -5,6 +5,14 @@ namespace ZfcUserDoctrineCouchODM\Mapper;
 use Doctrine\ODM\CouchDB\DocumentManager,
     ZfcUserDoctrineCouchODM\Options\ModuleOptions;
 
+class UserInsertDuplicateException extends \Exception {
+    public function __construct($message = null) {
+        if (!$message) {
+            $this->message = "Duplicated username or email.";
+        }
+    }
+}
+
 class UserCouchDB implements \ZfcUser\Mapper\UserInterface
 {
     /**
@@ -21,29 +29,24 @@ class UserCouchDB implements \ZfcUser\Mapper\UserInterface
     {
         $this->dm      = $dm;
         $this->options = $options;
+        $this->entityClass = $this->options->getUserEntityClass();
     }
 
     public function findByEmail($email)
     {
-        $dm = $this->getDocumentManager();
-        $class = $this->options->getUserEntityClass();
-        $user = $dm->getRepository($class)->findOneBy(array('email' => $email));
+        $user = $this->getUserRepository()->findOneBy(array('email' => $email));
         return $user;
     }
 
     public function findByUsername($username)
     {
-        $dm = $this->getDocumentManager();
-        $class = $this->options->getUserEntityClass();
-        $user = $dm->getRepository($class)->findOneBy(array('username' => $username));
+        $user = $this->getUserRepository()->findOneBy(array('username' => $username));
         return $user;
     }
     
     public function findById($id)
     {
-        $dm = $this->getDocumentManager();
-        $class = $this->options->getUserEntityClass();
-        $user = $dm->getRepository($class)->findOneBy(array('id' => $id));
+        $user = $this->dm->find($this->entityClass, $id);
         return $user;
     }
 
@@ -60,21 +63,45 @@ class UserCouchDB implements \ZfcUser\Mapper\UserInterface
 
     public function getUserRepository()
     {
-    	$class = ZfcUser::getOption('user_entity_class');
-        return $this->getDocumentManager()->getRepository($class);
+        return $this->dm->getRepository($this->entityClass);
     }
     
     public function persist($document)
     {
-        $dm = $this->getDocumentManager();
+        $dm = $this->dm;
         $dm->persist($document);
         $dm->flush();
     }
     
     public function insert($document, $tableName = null, HydratorInterface $hydrator = null)
     {
-        $this->dm->persist($document);
-        $this->dm->flush();
+        $dm = $this->dm;
+        //checking
+        $loop = array(
+                'username' => $document->getUsername(),
+                'email' => $document->getEmail()
+            );
+        foreach ($loop as $criteria => $value) {
+            if ($this->getUserRepository()
+                ->findOneBy(array($criteria => $value)) !== null)
+            {
+                throw new UserInsertDuplicateException;
+            }
+        }
+
+        //OK
+        $dm->persist($document);
+        $dm->flush();
+
+        //Check again, just being careful
+        foreach ($loop as $criteria => $value) {
+            $users = $this->getUserRepository()->findBy(array($criteria => $value));
+            if (count($users) > 1) {
+                $dm->remove($document);
+                $dm->flush();
+                throw new UserInsertDuplicateException;          
+            }
+        }
     }
 
     public function update($document, $where = null, $tableName = null, HydratorInterface $hydrator = null)

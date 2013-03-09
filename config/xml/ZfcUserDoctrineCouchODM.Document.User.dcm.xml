@@ -1,9 +1,9 @@
 <doctrine-mapping>
     <document name="ZfcUserDoctrineCouchODM\Document\User">
 
-        <id name="id"/> 
-        <field name="username" type="string"/>
-        <field name="email" type="string"/>
+        <id name="id"/>
+        <field name="username" index="true" type="string"/>
+        <field name="email" index="true" type="string"/>
         <field name="displayName" type="string"/>
         <field name="password" type="string"/>
         <field name="state" type="int"/>
