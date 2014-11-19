@@ -1,0 +1,37 @@
+{
+    "name": "phaikawl/ZfcUserDoctrineCouchODM",
+    "description": "ZfcUserDoctrineCouchODM is a CouchDb storage adapter for ZfcUser",
+    "type": "library",
+    "homepage": "https://github.com/phaikawl/ZfcUserDoctrineCouchODM",
+    "keywords": [
+        "zf2",
+        "authentication",
+        "couchdb"
+    ],
+    "authors": [
+        {
+            "name": "Hai Thanh Nguyen",
+            "email": "phaikawl@gmail.com",
+            "homepage": "http://vosdev.github.io/"
+        },
+        {
+            "name": "Michael Scholl",
+            "email": "michael@wesrc.com",
+            "homepage": "https://www.wesrc.com/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zf-commons/zfc-user": "1.2.1",
+        "doctrine/doctrine-module": "~0.8.0",
+        "ardemiranda/doctrine-couch-odm-module": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "ZfcUser": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}
