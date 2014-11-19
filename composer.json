@@ -1,5 +1,5 @@
 {
-    "name": "phaikawl/ZfcUserDoctrineCouchODM",
+    "name": "phaikawl/zfc-user-doctrine-couch-odm",
     "description": "ZfcUserDoctrineCouchODM is a CouchDb storage adapter for ZfcUser",
     "type": "library",
     "homepage": "https://github.com/phaikawl/ZfcUserDoctrineCouchODM",
